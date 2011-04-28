@@ -1,0 +1,6 @@
+GMP4j
+
+High-speed source-compatible implementation of BigInteger using native GMP.
+
+License information:
+This is free software licensed under GNU Lesser General Public License Version 3 Available at http://www.gnu.org/licenses/lgpl.html
