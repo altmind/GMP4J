@@ -1,6 +1,7 @@
 package us.altio.gmp4j.tests.bench.takashi;
 
-import java.math.BigInteger;
+import us.altio.gmp4j.BigInteger;
+
 
 /**
  * Takahashi Daisuke Fibonacci calculation.
@@ -8,15 +9,15 @@ import java.math.BigInteger;
  * http://www.stevekrenzel.com/articles/fibonacci
  *
  */
-public class JMBTakashi {
+public class GMP4JTakashi {
 
-	BigInteger MINUSTWO = new BigInteger("-2");
-	BigInteger TWO = new BigInteger("2");
-	BigInteger FIVE = new BigInteger("5");
-	BigInteger SIX = new BigInteger("6");
+	BigInteger MINUSTWO = new BigInteger(-2);
+	BigInteger TWO = new BigInteger(2);
+	BigInteger FIVE = new BigInteger(5);
+	BigInteger SIX = new BigInteger(6);
 
 	public static void main(String[] args) {
-		JMBTakashi f = new JMBTakashi();
+		GMP4JTakashi f = new GMP4JTakashi();
 		System.out.println(f.fib(1400000).toString().length());
 	}
 
@@ -36,10 +37,10 @@ public class JMBTakashi {
 		for (int i = 0; i < exp - 1; i++) {
 			mask = mask.shiftRight(1);
 			//BigInteger F2 = F.pow(2);
-			BigInteger F2 = F.multiply(F);
+			BigInteger F2 = F.pow(2);
 			//BigInteger FL2 = (F.add(L)).pow(2);
 			BigInteger intrm=F.add(L);
-			BigInteger FL2 = intrm.multiply(intrm);
+			BigInteger FL2 = intrm.pow(2);
 			//System.out.println("FL2 sz: "+(long)(FL2.bitLength()/8));
 			F = FL2.subtract(F2.multiply(SIX)).shiftRight(1).subtract(sign);
 			//System.out.println("F sz: "+(long)(F.bitLength()/8));

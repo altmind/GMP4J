@@ -1,11 +1,10 @@
 package us.altio.gmp4j;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
+import us.altio.gmp4j.Pointer;
 
-public class BigInteger extends Number implements Comparable<BigInteger>, Externalizable {
+
+@SuppressWarnings("serial")
+public class BigInteger extends Number implements Comparable<BigInteger> {
 	private Pointer native_ptr;
 	private static volatile long seedUniquifier = 8682522807148012L;
 	public static long count = 0;
@@ -31,7 +30,7 @@ public class BigInteger extends Number implements Comparable<BigInteger>, Extern
 	}
 
 	public BigInteger() {
-		natInitialize();
+		natMpzInitSetSi(0l);
 	}
 
 	public BigInteger(String val) {
@@ -45,6 +44,8 @@ public class BigInteger extends Number implements Comparable<BigInteger>, Extern
 	}
 
 	private BigInteger(Pointer p) {
+		if (p==null)
+			throw new NullPointerException("GMP operation failed.");
 		native_ptr = p;
 	}
 
@@ -100,7 +101,7 @@ public class BigInteger extends Number implements Comparable<BigInteger>, Extern
 	private native String natMpzGetStr(int radix);
 
 	
-	private native Pointer natMpzPowUi(Pointer p, long v);
+	private native Pointer natMpzPowUi(Pointer p, int v);
 	private native Pointer natMpzTdivQ(Pointer p1, Pointer p2);
 	private native Pointer natMpzTdivR(Pointer p1, Pointer p2);
 	private native boolean natMpzDivisible(Pointer p1, Pointer p2);
@@ -461,19 +462,5 @@ public class BigInteger extends Number implements Comparable<BigInteger>, Extern
 		initializePrngIfNeeded();
 		return new BigInteger(natMpzUrandomb(prngState, bitLength));
 	}
-
-	@Override
-	public void writeExternal(ObjectOutput out) throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void readExternal(ObjectInput in) throws IOException,
-			ClassNotFoundException {
-		// TODO Auto-generated method stub
-		
-	}
-
 	
 }
