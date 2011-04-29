@@ -15,6 +15,12 @@ public class GMP4JFibonacci {
 				fibList.add(f);
 			return f;
 		}
+		if (n <= 2) {
+			f = BigInteger.ONE;
+			if (fibList.size() <= 2)
+				fibList.add(f);
+			return f;
+		}
 		f = (n < fibList.size()) ? (fibList.get(n - 2).add(fibList.get(n - 1)))
 				: fib(n - 2).add(fib(n - 1));
 		if (n >= fibList.size())

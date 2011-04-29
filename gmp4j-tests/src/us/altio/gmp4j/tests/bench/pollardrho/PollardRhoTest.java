@@ -12,10 +12,10 @@ public class PollardRhoTest {
 
 	@Test
 	public void testPollardRho() {
-		while (true) {
-			String i = java.math.BigInteger.probablePrime(32, new SecureRandom()).multiply(java.math.BigInteger.probablePrime(32, new SecureRandom())).toString();
+		for(int sz=16; sz<=80; sz+=2) {
+			String i = java.math.BigInteger.probablePrime(sz, new SecureRandom()).multiply(java.math.BigInteger.probablePrime(sz, new SecureRandom())).toString();
 			//String i = BigInteger.random(80).multiply(BigInteger.random(80)).toString();
-			System.out.println("["+i+"] ");
+			System.out.print(sz+",");
 
 			GMP4JTrivialPollardRho gpr = new GMP4JTrivialPollardRho();
 			JMBPollardRho jpr = new JMBPollardRho();
@@ -30,7 +30,7 @@ public class PollardRhoTest {
 			java.math.BigInteger r23 = r2.multiply(r22);
 			long t3=System.nanoTime();
 			
-			System.out.println((t2-t1)/1000000+" "+(t3-t2)/1000000);
+			System.out.println((t2-t1)/1000000+","+(t3-t2)/1000000);
 			String rs2=r23.toString();
 			String rs1=r13.toString();
 			if (!rs2.equals(rs1))

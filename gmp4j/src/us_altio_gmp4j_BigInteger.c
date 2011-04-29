@@ -292,7 +292,7 @@ JNIEXPORT jobjectArray JNICALL Java_us_altio_gmp4j_BigInteger_natMpzTdivQR(
 
 	native_ptr_fldq = Common_NewRawDataObject(env, newq);
 	native_ptr_fldr = Common_NewRawDataObject(env, newr);
-	bigIntegerClass = (*env)->FindClass(env, "Lus/altio/gmp4j/Pointer;");
+	bigIntegerClass = (*env)->FindClass(env, "us/altio/gmp4j/Pointer");
 	if (bigIntegerClass == NULL) {
 		mpz_clear(newq);
 		Common_free(env, newq);
@@ -402,7 +402,7 @@ JNIEXPORT jobjectArray JNICALL Java_us_altio_gmp4j_BigInteger_natMpzSqrtRem(
 
 	native_ptr_fldq = Common_NewRawDataObject(env, newq);
 	native_ptr_fldr = Common_NewRawDataObject(env, newr);
-	bigIntegerClass = (*env)->FindClass(env, "Lus/altio/gmp4j/Pointer;");
+	bigIntegerClass = (*env)->FindClass(env, "us/altio/gmp4j/Pointer");
 	if (bigIntegerClass == NULL) {
 		mpz_clear(newq);
 		Common_free(env, newq);
@@ -472,7 +472,7 @@ JNIEXPORT jobjectArray JNICALL Java_us_altio_gmp4j_BigInteger_natMpzRootRem(
 
 	native_ptr_fldq = Common_NewRawDataObject(env, newq);
 	native_ptr_fldr = Common_NewRawDataObject(env, newr);
-	bigIntegerClass = (*env)->FindClass(env, "Lus/altio/gmp4j/Pointer;");
+	bigIntegerClass = (*env)->FindClass(env, "us/altio/gmp4j/Pointer");
 	if (bigIntegerClass == NULL) {
 		mpz_clear(newq);
 		Common_free(env, newq);
@@ -602,7 +602,7 @@ JNIEXPORT jobjectArray JNICALL Java_us_altio_gmp4j_BigInteger_natMpzFib2(
 
 	native_ptr_r1 = Common_NewRawDataObject(env, r1);
 	native_ptr_r2 = Common_NewRawDataObject(env, r2);
-	bigIntegerClass = (*env)->FindClass(env, "Lus/altio/gmp4j/Pointer;");
+	bigIntegerClass = (*env)->FindClass(env, "us/altio/gmp4j/Pointer");
 	if (bigIntegerClass == NULL) {
 		mpz_clear(r1);
 		Common_free(env, r1);
