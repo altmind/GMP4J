@@ -18,7 +18,7 @@ import us.altio.gmp4j.BigInteger;
 
 public class UnitTestRandomValuesCompareWithJMB {
 
-	static final long RUNCYCLES = 10000;
+	static final long RUNCYCLES = 5000;
 
 	@Before
 	public void setUp() throws Exception {
@@ -43,52 +43,43 @@ public class UnitTestRandomValuesCompareWithJMB {
 
 	@Test
 	public void testToString() {
-		Random r = new Random();
 		for (int i = 0; i < RUNCYCLES; i++) {
-			String s = getRandomNumString(r,64);
+			String s = getRandomNumString(64);
 			BigInteger bi = new BigInteger(s);
 			Assert.assertEquals(s, bi.toString());
 		}
 	}
 
 	@Test
-	/* Fill List of BIs, measure free mem, remove ref to list,
-	 * run gc and expect at least 100K of mem to reclaim.
+	/*
+	 * Fill List of BIs, measure free mem, remove ref to list, run gc and expect
+	 * at least 100K of mem to reclaim.
 	 */
 	/*
 	 * Removed this test because its results are not deterministic.
 	 * http://martinfowler.com/articles/nonDeterminism.html
 	 */
 	public void testFinalize() {
-		/*long t1 = Runtime.getRuntime().freeMemory();
-		List<BigInteger> bis = new ArrayList<BigInteger>();
-		for (int i = 0; i < RUNCYCLES; i++) {
-			bis.add(BigInteger.random(1280));
-		}
-		long t2 = Runtime.getRuntime().freeMemory();
-		System.gc();
-		try {
-			Thread.sleep(200);
-		} catch (InterruptedException e) {
-		}
-		bis=null;
-		System.gc();
-		try {
-			Thread.sleep(200);
-		} catch (InterruptedException e) {
-		}
-		long t3 = Runtime.getRuntime().freeMemory();
-		System.err.println("Reclaimed: "+(t3-t2)/1000+"K of mem");
-		Assert.assertTrue((t3-t2)>100000);*/
+		/*
+		 * long t1 = Runtime.getRuntime().freeMemory(); List<BigInteger> bis =
+		 * new ArrayList<BigInteger>(); for (int i = 0; i < RUNCYCLES; i++) {
+		 * bis.add(BigInteger.random(1280)); } long t2 =
+		 * Runtime.getRuntime().freeMemory(); System.gc(); try {
+		 * Thread.sleep(200); } catch (InterruptedException e) { } bis=null;
+		 * System.gc(); try { Thread.sleep(200); } catch (InterruptedException
+		 * e) { } long t3 = Runtime.getRuntime().freeMemory();
+		 * System.err.println("Reclaimed: "+(t3-t2)/1000+"K of mem");
+		 * Assert.assertTrue((t3-t2)>100000);
+		 */
 	}
 
 	@Test
 	public void testIntValue() {
 		Random r = new Random();
 		for (int i = 0; i < RUNCYCLES; i++) {
-			int randInt=r.nextInt();
+			int randInt = r.nextInt();
 			BigInteger bi = new BigInteger(randInt);
-			Assert.assertEquals(randInt,bi.intValue());
+			Assert.assertEquals(randInt, bi.intValue());
 		}
 	}
 
@@ -96,7 +87,7 @@ public class UnitTestRandomValuesCompareWithJMB {
 	public void testLongValue() {
 		Random r = new Random();
 		for (int i = 0; i < RUNCYCLES; i++) {
-			long randLong=r.nextLong();
+			long randLong = r.nextLong();
 			BigInteger bi = new BigInteger(randLong);
 			Assert.assertEquals(randLong, bi.longValue());
 		}
@@ -106,9 +97,9 @@ public class UnitTestRandomValuesCompareWithJMB {
 	public void testFloatValue() {
 		Random r = new Random();
 		for (int i = 0; i < RUNCYCLES; i++) {
-			long randLong=r.nextLong();
+			long randLong = r.nextLong() - (Long.MAX_VALUE / 2);
 			BigInteger bi = new BigInteger(randLong);
-			Assert.assertEquals(randLong, bi.floatValue(), 0.00001);
+			Assert.assertEquals(randLong, (long) bi.floatValue());
 		}
 	}
 
@@ -116,9 +107,9 @@ public class UnitTestRandomValuesCompareWithJMB {
 	public void testDoubleValue() {
 		Random r = new Random();
 		for (int i = 0; i < RUNCYCLES; i++) {
-			long randLong=r.nextLong();
+			long randLong = r.nextLong() - (Long.MAX_VALUE / 2);
 			BigInteger bi = new BigInteger(randLong);
-			Assert.assertEquals(randLong, bi.doubleValue(), 0.00001);
+			Assert.assertEquals(randLong, (long) bi.doubleValue());
 		}
 	}
 
@@ -126,7 +117,7 @@ public class UnitTestRandomValuesCompareWithJMB {
 	public void testBigIntegerLong() {
 		Random r = new Random();
 		for (int i = 0; i < RUNCYCLES; i++) {
-			long randLong=r.nextLong();
+			long randLong = r.nextLong();
 			BigInteger bi = new BigInteger(randLong);
 			Assert.assertEquals(randLong, bi.longValue());
 		}
@@ -143,9 +134,8 @@ public class UnitTestRandomValuesCompareWithJMB {
 	 * This method copies testToString() test
 	 */
 	public void testBigIntegerString() {
-		Random r = new Random();
 		for (int i = 0; i < RUNCYCLES; i++) {
-			String s = getRandomNumString(r,64);
+			String s = getRandomNumString(64);
 			BigInteger bi = new BigInteger(s);
 			Assert.assertEquals(s, bi.toString());
 		}
@@ -155,11 +145,11 @@ public class UnitTestRandomValuesCompareWithJMB {
 	public void testBigIntegerStringInt() {
 		Random r = new Random();
 		for (int i = 0; i < RUNCYCLES; i++) {
-			String s = getRandomNumString(r,64);
+			String s = getRandomNumString(64);
 			java.math.BigInteger jmbi = new java.math.BigInteger(s);
-			int base = r.nextInt(26)+10;
-			String jmbis=jmbi.toString(base);
-			BigInteger bi = new BigInteger(jmbis,base);
+			int base = r.nextInt(26) + 10;
+			String jmbis = jmbi.toString(base);
+			BigInteger bi = new BigInteger(jmbis, base);
 			Assert.assertEquals(s, bi.toString());
 		}
 	}
@@ -168,16 +158,17 @@ public class UnitTestRandomValuesCompareWithJMB {
 	public void testToStringInt() {
 		Random r = new Random();
 		for (int i = 0; i < RUNCYCLES; i++) {
-			String s = getRandomNumString(r,64);
+			String s = getRandomNumString(64);
 			java.math.BigInteger jmbi = new java.math.BigInteger(s);
-			int base = r.nextInt(26)+10;
-			String jmbis=jmbi.toString(base);
-			BigInteger bi = new BigInteger(jmbis,base);
+			int base = r.nextInt(26) + 10;
+			String jmbis = jmbi.toString(base);
+			BigInteger bi = new BigInteger(jmbis, base);
 			Assert.assertEquals(jmbis, bi.toString(base));
 		}
 	}
 
-	private String getRandomNumString(Random r, int len) {
+	private String getRandomNumString(int len) {
+		Random r = new Random();
 		String s = StringUtils.stripStart(TestUtils.genStringFromChars(r
 				.nextInt(len) + 2, "0123456789"), "0");
 		if (s.equals(""))
@@ -192,119 +183,244 @@ public class UnitTestRandomValuesCompareWithJMB {
 	public void testCompareTo() {
 		Random r = new Random();
 		for (int i = 0; i < RUNCYCLES; i++) {
-			BigInteger bi1 = BigInteger.random(r.nextInt(256)+16);
-			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1.toString());
-			BigInteger bi2 = BigInteger.random(r.nextInt(256)+16);
-			java.math.BigInteger jmbi2 = new java.math.BigInteger(bi2.toString());
+			BigInteger bi1 = BigInteger.random(r.nextInt(256) + 16);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			BigInteger bi2 = BigInteger.random(r.nextInt(256) + 16);
+			java.math.BigInteger jmbi2 = new java.math.BigInteger(bi2
+					.toString());
 			Assert.assertEquals(jmbi2.compareTo(jmbi1), bi2.compareTo(bi1));
 		}
 	}
 
 	@Test
 	public void testAbs() {
-		Random r = new Random();
 		for (int i = 0; i < RUNCYCLES; i++) {
-			int bitness = r.nextInt(64)+16; 
-			BigInteger biPositive = BigInteger.random(bitness);
-			BigInteger bi = biPositive.subtract(new BigInteger(2l).pow(bitness-1));
+			BigInteger bi = getPosNegBI(64);
 			java.math.BigInteger jmbi = new java.math.BigInteger(bi.toString());
-			if (bi.signum()==-1)
-			{
-				Assert.assertEquals(BigInteger.ZERO,bi.add(bi.abs()));
+			if (bi.signum() == -1) {
+				Assert.assertEquals(BigInteger.ZERO, bi.add(bi.abs()));
 			}
-			System.err.println(bi.toString());
 			Assert.assertEquals(jmbi.abs().toString(), bi.abs().toString());
 		}
 	}
 
+	private BigInteger getPosNegBI(int bits) {
+		Random r = new Random();
+		int bitness = r.nextInt(bits) + 16;
+		BigInteger biPositive = BigInteger.random(bitness);
+		BigInteger bi = biPositive
+				.subtract(new BigInteger(2l).pow(bitness - 1));
+		return bi;
+	}
+
 	@Test
-	@Ignore
 	public void testAdd() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(128);
+			BigInteger bi2 = getPosNegBI(128);
+			BigInteger bi3 = bi1.add(bi2);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			java.math.BigInteger jmbi2 = new java.math.BigInteger(bi2
+					.toString());
+			java.math.BigInteger jmbi3 = jmbi1.add(jmbi2);
+			Assert.assertEquals(jmbi3.toString(), bi3.toString());
+		}
+
 	}
 
 	@Test
-	@Ignore
 	public void testAnd() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(128);
+			BigInteger bi2 = getPosNegBI(128);
+			BigInteger bi3 = bi1.and(bi2);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			java.math.BigInteger jmbi2 = new java.math.BigInteger(bi2
+					.toString());
+			java.math.BigInteger jmbi3 = jmbi1.and(jmbi2);
+			Assert.assertEquals(jmbi3.toString(), bi3.toString());
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testAndNot() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(128);
+			BigInteger bi2 = getPosNegBI(128);
+			BigInteger bi3 = bi1.andNot(bi2);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			java.math.BigInteger jmbi2 = new java.math.BigInteger(bi2
+					.toString());
+			java.math.BigInteger jmbi3 = jmbi1.andNot(jmbi2);
+			Assert.assertEquals(jmbi3.toString(), bi3.toString());
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testBitCount() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(512);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			Assert.assertEquals(jmbi1.bitCount(), bi1.bitCount());
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testBitLength() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(512);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			Assert.assertEquals(jmbi1.bitLength(), bi1.bitLength());
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testClearBit() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(256);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			int k = 0;
+			for (int j = 0; i < 30; i++) {
+				Assert.assertEquals(jmbi1.toString(), bi1.toString());
+				bi1 = bi1.clearBit(k);
+				jmbi1 = jmbi1.clearBit(k);
+				k += j;
+			}
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testDivide() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(256);
+			BigInteger bi2 = getPosNegBI(128);
+			BigInteger bi3 = bi1.divide(bi2);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			java.math.BigInteger jmbi2 = new java.math.BigInteger(bi2
+					.toString());
+			java.math.BigInteger jmbi3 = jmbi1.divide(jmbi2);
+			Assert.assertEquals(jmbi3.toString(), bi3.toString());
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testDivideAndRemainder() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = new BigInteger(getRandomNumString(128));
+			BigInteger bi2 = new BigInteger(getRandomNumString(64));
+			if (bi2.signum() == 0)
+				continue;
+			BigInteger bidiv[] = bi1.divideAndRemainder(bi2);
+			BigInteger bi3 = bidiv[0].multiply(bi2).add(bidiv[1]);
+			Assert.assertEquals(bi1, bi3);
+
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testFlipBit() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(256);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			int k = 0;
+			for (int j = 0; i < 30; i++) {
+				Assert.assertEquals(jmbi1.toString(), bi1.toString());
+				bi1 = bi1.flipBit(k);
+				jmbi1 = jmbi1.flipBit(k);
+				k += j;
+			}
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testGcd() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(128);
+			BigInteger bi2 = getPosNegBI(128);
+
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			java.math.BigInteger jmbi2 = new java.math.BigInteger(bi2
+					.toString());
+
+			Assert.assertEquals(jmbi1.gcd(jmbi2).toString(), bi1.gcd(bi2)
+					.toString());
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testGetLowestSetBit() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(128);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			Assert.assertEquals(jmbi1.getLowestSetBit(), bi1.getLowestSetBit());
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testIsProbablePrime() {
-		fail("Not yet implemented");
+		BigInteger lastPrime = new BigInteger(271);
+		for (int i = 0; i < RUNCYCLES; i++) {
+			Assert.assertTrue(lastPrime.isProbablePrime(20));
+			lastPrime = lastPrime.nextProbablePrime();
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testMax() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(128);
+			BigInteger bi2 = getPosNegBI(128);
+
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			java.math.BigInteger jmbi2 = new java.math.BigInteger(bi2
+					.toString());
+
+			Assert.assertEquals(jmbi1.max(jmbi2).toString(), bi1.max(bi2)
+					.toString());
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testMin() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(128);
+			BigInteger bi2 = getPosNegBI(128);
+
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			java.math.BigInteger jmbi2 = new java.math.BigInteger(bi2
+					.toString());
+
+			Assert.assertEquals(jmbi1.min(jmbi2).toString(), bi1.min(bi2)
+					.toString());
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testMod() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(512);
+			BigInteger bi2 = getPosNegBI(128).abs();
+			BigInteger bi3 = bi1.mod(bi2);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			java.math.BigInteger jmbi2 = new java.math.BigInteger(bi2
+					.toString());
+			java.math.BigInteger jmbi3 = jmbi1.mod(jmbi2);
+			Assert.assertEquals(jmbi3.toString(), bi3.toString());
+		}
 	}
 
 	@Test
@@ -314,45 +430,101 @@ public class UnitTestRandomValuesCompareWithJMB {
 	}
 
 	@Test
-	@Ignore
 	public void testModPow() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(512);
+			BigInteger bi2 = getPosNegBI(64).abs();
+			BigInteger bi3 = getPosNegBI(128).abs();
+			BigInteger bi4 = bi1.modPow(bi2, bi3);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			java.math.BigInteger jmbi2 = new java.math.BigInteger(bi2
+					.toString());
+			java.math.BigInteger jmbi3 = new java.math.BigInteger(bi3
+					.toString());
+			java.math.BigInteger jmbi4 = jmbi1.modPow(jmbi2, jmbi3);
+			Assert.assertEquals(jmbi4.toString(), bi4.toString());
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testMultiply() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(128);
+			BigInteger bi2 = getPosNegBI(128);
+			BigInteger bi3 = bi1.multiply(bi2);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			java.math.BigInteger jmbi2 = new java.math.BigInteger(bi2
+					.toString());
+			java.math.BigInteger jmbi3 = jmbi1.multiply(jmbi2);
+			Assert.assertEquals(jmbi3.toString(), bi3.toString());
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testNegate() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(128);
+			Assert.assertEquals(BigInteger.ZERO, bi1.add(bi1.negate()));
+			if (bi1.signum() < 0)
+				Assert.assertEquals(1, bi1.negate().signum());
+			else if (bi1.signum() > 0)
+				Assert.assertEquals(-1, bi1.negate().signum());
+			else if (bi1.signum() == 0)
+				Assert.assertEquals(0, bi1.negate().signum());
+		}
 	}
 
 	@Test
-	@Ignore
+	// the same as for testIsProbablePrime
 	public void testNextProbablePrime() {
-		fail("Not yet implemented");
+		BigInteger lastPrime = new BigInteger(271);
+		for (int i = 0; i < RUNCYCLES; i++) {
+			Assert.assertTrue(lastPrime.isProbablePrime(20));
+			lastPrime = lastPrime.nextProbablePrime();
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testNot() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(256);
+			BigInteger bi2 = bi1.not();
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			java.math.BigInteger jmbi2 = jmbi1.not();
+			Assert.assertEquals(jmbi2.toString(), bi2.toString());
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testOr() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(128);
+			BigInteger bi2 = getPosNegBI(128);
+			BigInteger bi3 = bi1.or(bi2);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			java.math.BigInteger jmbi2 = new java.math.BigInteger(bi2
+					.toString());
+			java.math.BigInteger jmbi3 = jmbi1.or(jmbi2);
+			Assert.assertEquals(jmbi3.toString(), bi3.toString());
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testPow() {
-		fail("Not yet implemented");
+		Random r = new Random();
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(128);
+			int power = r.nextInt(24) + 1;
+			BigInteger bi3 = bi1.pow(power);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			java.math.BigInteger jmbi3 = jmbi1.pow(power);
+			Assert.assertEquals(jmbi3.toString(), bi3.toString());
+		}
 	}
 
 	@Test
@@ -362,39 +534,91 @@ public class UnitTestRandomValuesCompareWithJMB {
 	}
 
 	@Test
-	@Ignore
 	public void testSetBit() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(256);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			int k = 0;
+			for (int j = 0; i < 30; i++) {
+				Assert.assertEquals(jmbi1.toString(), bi1.toString());
+				bi1 = bi1.setBit(k);
+				jmbi1 = jmbi1.setBit(k);
+				k += j;
+			}
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testShiftLeft() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(256);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			for (int j = 0; i < 10; i++) {
+				Assert.assertEquals(jmbi1.toString(), bi1.toString());
+				bi1 = bi1.shiftLeft(j);
+				jmbi1 = jmbi1.shiftLeft(j);
+			}
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testShiftRight() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(256);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			for (int j = 0; i < 10; i++) {
+				Assert.assertEquals(jmbi1.toString(), bi1.toString());
+				bi1 = bi1.shiftLeft(j);
+				jmbi1 = jmbi1.shiftLeft(j);
+			}
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testSignum() {
-		fail("Not yet implemented");
+		Assert.assertEquals(1, BigInteger.ONE.signum());
+		Assert.assertEquals(0, BigInteger.ZERO.signum());
+		Assert.assertEquals(-1, BigInteger.MINUSONE.signum());
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(32);
+
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+
+			Assert.assertEquals(jmbi1.signum(), bi1.signum());
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testSubtract() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(128);
+			BigInteger bi2 = getPosNegBI(128);
+			BigInteger bi3 = bi1.subtract(bi2);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			java.math.BigInteger jmbi2 = new java.math.BigInteger(bi2
+					.toString());
+			java.math.BigInteger jmbi3 = jmbi1.subtract(jmbi2);
+			Assert.assertEquals(jmbi3.toString(), bi3.toString());
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testTestBit() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(256);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			int k = 0;
+			for (int j = 0; i < 30; i++) {
+				Assert.assertEquals(jmbi1.testBit(k), bi1.testBit(k));
+				k += j;
+			}
+		}
 	}
 
 	@Test
@@ -404,21 +628,29 @@ public class UnitTestRandomValuesCompareWithJMB {
 	}
 
 	@Test
-	@Ignore
 	public void testXor() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(128);
+			BigInteger bi2 = getPosNegBI(128);
+			BigInteger bi3 = bi1.xor(bi2);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			java.math.BigInteger jmbi2 = new java.math.BigInteger(bi2
+					.toString());
+			java.math.BigInteger jmbi3 = jmbi1.xor(jmbi2);
+			Assert.assertEquals(jmbi3.toString(), bi3.toString());
+		}
 	}
 
 	@Test
-	@Ignore
-	public void testProbablePrime() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	@Ignore
 	public void testValueOf() {
-		fail("Not yet implemented");
+		Random r = new Random();
+		for (int i = 0; i < RUNCYCLES; i++) {
+			long l1 = r.nextLong();
+			BigInteger bi = BigInteger.valueOf(l1);
+			long l2 = Long.parseLong(bi.toString());
+			Assert.assertEquals(l1, l2);
+		}
 	}
 
 	@Test
@@ -440,15 +672,19 @@ public class UnitTestRandomValuesCompareWithJMB {
 	}
 
 	@Test
-	@Ignore
-	public void testDiv() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	@Ignore
 	public void testSqrt() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = new BigInteger(getRandomNumString(128));
+			boolean arithmeticExceptionThrown = false;
+			try {
+				BigInteger bisqrt[] = bi1.sqrt();
+				BigInteger bi3 = bisqrt[0].multiply(bisqrt[0]).add(bisqrt[1]);
+				Assert.assertEquals(bi1, bi3);
+			} catch (ArithmeticException e) {
+				arithmeticExceptionThrown = true;
+			}
+			Assert.assertTrue(bi1.signum() >= 0 || arithmeticExceptionThrown);
+		}
 	}
 
 	@Test
@@ -494,15 +730,42 @@ public class UnitTestRandomValuesCompareWithJMB {
 	}
 
 	@Test
-	@Ignore
 	public void testFibonacci() {
-		fail("Not yet implemented");
+		Assert.assertEquals(BigInteger.ZERO, BigInteger.fibonacci(0));
+		Assert.assertEquals(BigInteger.ONE, BigInteger.fibonacci(1));
+		Assert.assertEquals(BigInteger.ONE, BigInteger.fibonacci(1));
+		List<BigInteger> fibonacciSeq = new ArrayList<BigInteger>();
+		fibonacciSeq.add(BigInteger.ZERO);
+		fibonacciSeq.add(BigInteger.ONE);
+		fibonacciSeq.add(BigInteger.ONE);
+
+		for (int i = 3; i < RUNCYCLES; i++) {
+			BigInteger f = BigInteger.fibonacci(i);
+			Assert.assertEquals(f, fibonacciSeq.get(fibonacciSeq.size() - 1)
+					.add(fibonacciSeq.get(fibonacciSeq.size() - 2)));
+			fibonacciSeq.add(f);
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testFibonacciPair() {
-		fail("Not yet implemented");
+		Assert.assertEquals(BigInteger.ZERO, BigInteger.fibonacci(0));
+		Assert.assertEquals(BigInteger.ONE, BigInteger.fibonacci(1));
+		Assert.assertEquals(BigInteger.ONE, BigInteger.fibonacci(1));
+		List<BigInteger> fibonacciSeq = new ArrayList<BigInteger>();
+		fibonacciSeq.add(BigInteger.ZERO);
+		fibonacciSeq.add(BigInteger.ONE);
+		fibonacciSeq.add(BigInteger.ONE);
+
+		for (int i = 3; i < RUNCYCLES; i++) {
+			BigInteger f[] = BigInteger.fibonacciPair(i);
+			Assert.assertEquals(f[0], fibonacciSeq.get(fibonacciSeq.size() - 1)
+					.add(fibonacciSeq.get(fibonacciSeq.size() - 2)));
+			Assert
+					.assertEquals(f[1], fibonacciSeq
+							.get(fibonacciSeq.size() - 1));
+			fibonacciSeq.add(f[0]);
+		}
 	}
 
 	@Test
@@ -518,33 +781,34 @@ public class UnitTestRandomValuesCompareWithJMB {
 	}
 
 	@Test
-	@Ignore
-	public void testNumber() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	@Ignore
 	public void testByteValue() {
-		fail("Not yet implemented");
+		Random r = new Random();
+		for (int i = 0; i < RUNCYCLES; i++) {
+			// will overflow, this is ok
+			short shortval = (short) r.nextInt(2 ^ 8);
+			BigInteger bi1 = new BigInteger(shortval);
+			Assert.assertEquals(shortval, bi1.shortValue());
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testShortValue() {
-		fail("Not yet implemented");
+		Random r = new Random();
+		for (int i = 0; i < RUNCYCLES; i++) {
+			// will overflow, this is ok
+			short shortval = (short) r.nextInt(2 ^ 16);
+			BigInteger bi1 = new BigInteger(shortval);
+			Assert.assertEquals(shortval, bi1.shortValue());
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testHashCode() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	@Ignore
-	public void testClone() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(256);
+			BigInteger bi2 = bi1.add(BigInteger.ZERO);
+			Assert.assertTrue(bi2.hashCode() == bi1.hashCode());
+		}
 	}
 
 }

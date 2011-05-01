@@ -82,6 +82,7 @@ JNIEXPORT jobject JNICALL Java_us_altio_gmp4j_BigInteger_natMpzMul(JNIEnv * env,
 	native_ptr_fld = Common_NewRawDataObject(env, new);
 	return native_ptr_fld;
 }
+
 /*
  * initialize (Pointer)BI with java signed long
  */
@@ -104,7 +105,6 @@ JNIEXPORT void JNICALL Java_us_altio_gmp4j_BigInteger_natFinalize
 
 	ref=(mpz_ptr) Common_GetRawData(env, (*env)->GetObjectField(env, this,
 					native_ptr));
-
 	if (ref != NULL) {
 		mpz_clear(ref);
 		Common_free(env,ref);
@@ -152,20 +152,6 @@ JNIEXPORT jobject JNICALL Java_us_altio_gmp4j_BigInteger_natMpzAbs(JNIEnv * env,
 	native_ptr_fld = Common_NewRawDataObject(env, new);
 	return native_ptr_fld;
 }
-/*
- * Initialize GMP object with zero value. Basically useless, and should be replaced to signed int constructor.
- * TODO: @altmind remove this method in favor of Si initialize
- */
-JNIEXPORT void JNICALL Java_us_altio_gmp4j_BigInteger_natInitialize
-(JNIEnv *env, jobject this)
-{
-	mpz_ptr new;
-	jobject native_ptr_fld;
-	new = (mpz_ptr) Common_malloc(env, sizeof(mpz_t));
-	mpz_init(new);
-	native_ptr_fld = Common_NewRawDataObject(env, new);
-	(*env)->SetObjectField(env, this, native_ptr, native_ptr_fld);
-}
 
 /*
  * initialize GMP object from String. accepts radix param. 
@@ -211,6 +197,17 @@ JNIEXPORT jstring JNICALL Java_us_altio_gmp4j_BigInteger_natMpzGetStr(
 JNIEXPORT jlong JNICALL Java_us_altio_gmp4j_BigInteger_natGetSi(JNIEnv * env,
 		jobject this, jobject that) {
 	return (mpz_get_si((mpz_ptr) Common_GetRawData(env, that)));
+}
+
+/*
+ * return BI for passed double
+ * If the exponent from the conversion is too big, the result is system dependent. An infinity is returned where available. A hardware overflow trap may or may not occur.
+ * TODO: @altmind handle traps, exceptions in safe maner
+ */
+JNIEXPORT jdouble JNICALL Java_us_altio_gmp4j_BigInteger_natGetD
+  (JNIEnv *env, jobject this, jobject that)
+{
+  	return (mpz_get_d((mpz_ptr) Common_GetRawData(env, that)));
 }
 
 /*

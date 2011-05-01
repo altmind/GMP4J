@@ -12,7 +12,7 @@ bin/us_altio_gmp4j_BigInteger.h: bin/us/altio/BigInteger.class
 	"$(JAVA_HOME)bin/javah" -d bin -classpath bin us.altio.gmp4j.BigInteger	
 
 bin/gmp4j.dll: bin/us_altio_gmp4j_BigInteger.h
-	cl $(INCLUDES) src/common.c src/us_altio_gmp4j_BigInteger.c /Febin/libgmp4j.dll $(CFLAGS)
+	cl $(INCLUDES) src/common.c src/us_altio_gmp4j_BigInteger.c /Febin/gmp4j.dll $(CFLAGS)
 
 bin/gmp4j.jar:
 	"$(JAVA_HOME)bin/jar" cvf bin/gmp4j.jar -C bin us/altio/gmp4j
