@@ -1,22 +1,21 @@
 INCLUDES = /I"$(JAVA_HOME)include" /I"$(JAVA_HOME)include\win32" /I"$(MAKEDIR)\precompiled\mpir"
-CFLAGS = /LD #/showIncludes /link precomipled\mpir\mpir.lib
+CFLAGS = /O2 /LD /link precompiled\mpir\mpir.lib
 
 
 all: bin/gmp4j.dll bin/gmp4j.jar
 
 
 bin/us/altio/BigInteger.class: src/us/altio/gmp4j/*.java
-	javac -d bin src/us/altio/gmp4j/*.java
+	"$(JAVA_HOME)bin/javac" -d bin src/us/altio/gmp4j/*.java
 
 bin/us_altio_gmp4j_BigInteger.h: bin/us/altio/BigInteger.class
-	javah -d bin -classpath bin us.altio.gmp4j.BigInteger	
+	"$(JAVA_HOME)bin/javah" -d bin -classpath bin us.altio.gmp4j.BigInteger	
 
 bin/gmp4j.dll: bin/us_altio_gmp4j_BigInteger.h
-	echo $(INCLUDES)
-	cl $(INCLUDES) $(CFLAGS) src/us_altio_gmp4j_BigInteger.c /Febin/libgmp4j.dll 
+	cl $(INCLUDES) src/common.c src/us_altio_gmp4j_BigInteger.c /Febin/libgmp4j.dll $(CFLAGS)
 
 bin/gmp4j.jar:
-	jar cvf bin/gmp4j.jar bin/us/altio/gmp4j/*
+	"$(JAVA_HOME)bin/jar" cvf bin/gmp4j.jar -C bin us/altio/gmp4j
 	
 install:
 	echo please copy bin/libgmp4j.dll anywhere in your PATH: $(PATH)
@@ -25,4 +24,4 @@ check:
 	echo perform checks here
 
 clean:
-	del bin/*
+	del /Q bin\*
