@@ -72,7 +72,7 @@ Tested on:
 
 Unix
 ----
-Ensure that you installed JDK, sane C compiler, GMP library and GMP library headers(usually in gmp-dev package of your distro).
+Ensure that you installed JDK, sane C compiler, GMP library and GMP library headers(usually in gmp-dev package of your distro). Ensure that $JAVA_HOME points to root directory of jdk.
 Navigate to gmp4j directory
 > cd gmp4j
 Create "bin" direcrtory, if missing
@@ -85,20 +85,32 @@ And add gmp4j.jar to your classpath.
 
 Windows
 -----
-Open "Visual studio command prompt"(look in "Start" menu)
+Ensure that %JAVA_HOME% points to root directory of jdk. Open "Visual studio command prompt"(look in "Start" menu)
 Navigate to gmp4j directory
 > cd gmp4j
 Create "bin" direcrtory, if missing
 > mkdir bin
-Run make
-> make
+Run nmake -f Makefile.win
+> nmake -f Makefile.win
 If make was successful, copy bin/gmp4j.dll to somewhere in your library.path, for instance in bin directory of your jre/jdk.
 And add gmp4j.jar to your classpath.
 
+N.B. for your convinience, prebuilt binaries of MPIR are included in package, you dont need to download and build MPIR separately, however, you may.
 
 Quirks
 ------
-GMP4J uses native unmanaged memory for storing GMP BI objects. Each of this objects is associated with GMP4J BigInteger class. When GMP4J java BI object is garbage collected, native object is GC'd as well. However, unmanaged JNI memory is not tracked by JVM(JVM only tracks heap) - when there are actually a lot of native objects which can be GC'd, JVM see that there is a lot of free space in heap left, and don't run GC. It may be a good idea to run System.gc() when you suppose that there may be GMP4J objects for collection.
+* GMP4J uses native unmanaged memory for storing GMP BI objects. Each of this objects is associated with GMP4J BigInteger class. When GMP4J java BI object is garbage collected, native object is GC'd as well. However, unmanaged JNI memory is not tracked by JVM(JVM only tracks heap) - when there are actually a lot of native objects which can be GC'd, JVM see that there is a lot of free space in heap left, and don't run GC. It may be a good idea to run System.gc() when you suppose that there may be GMP4J objects for collection.
+* When building under cygwin, gcc may complain about code in jni_md.h. In that case replace line 
+
+>typedef __int64 jlong;
+
+with lines:
+
+>#ifdef __GNUC__
+> typedef long long jlong;
+>#else
+> typedef __int64 jlong;
+>#endif
 
 Where to find more information
 ------------------------------
