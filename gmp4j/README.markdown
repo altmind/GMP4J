@@ -33,34 +33,34 @@ Performance
 GMP4J benefits from operations on big input values. Operations on small inputs may be simply not algorithm-bounded. Gains are especially visible in multiplication, powering, toString. Some GMP4J operations are not faster than those, in j.m.BI: for instnce random number generation(GMP internally uses Mersenne Twister for PRNG, whereas java SecureRandom uses linear generator and hash, which is generally faster). To give you orders of performance increase, here is results of
 
 Fibonacci/Takashi:
-> n	GMP4j	JMB
-> 5000	0	5
-> 10000	0	20
-> 20000	0	40
-> 40000	0	44
-> 80000	3	89
-> 160000	3	283
-> 320000	7	973
-> 640000	21	3972
-> 1280000	70	15276
+	n	GMP4j	JMB
+	5000	0	5
+	10000	0	20
+	20000	0	40
+	40000	0	44
+	80000	3	89
+	160000	3	283
+	320000	7	973
+	640000	21	3972
+	1280000	70	15276
 
 PIDigits:
-> length GMP4j	JUB
-> 1000	67		347
-> 2000	126		384
-> 3000	240		515
-> 4000	368		715
-> 5000	427		980
-> 6000	557		1392
-> 7000	630		1781
-> 8000	995		2228
-> 9000	1122	2861
-> 10000	1241	3513
-> 11000	1524	4189
-> 12000	1956	4916
-> 13000	2042	5799
-> 14000	2047	6717
-> 15000	2201	7798
+	length GMP4j	JUB
+	1000	67		347
+	2000	126		384
+	3000	240		515
+	4000	368		715
+	5000	427		980
+	6000	557		1392
+	7000	630		1781
+	8000	995		2228
+	9000	1122	2861
+	10000	1241	3513
+	11000	1524	4189
+	12000	1956	4916
+	13000	2042	5799
+	14000	2047	6717
+	15000	2201	7798
 
 Installation
 ------------
@@ -74,24 +74,38 @@ Unix
 ----
 Ensure that you installed JDK, sane C compiler, GMP library and GMP library headers(usually in gmp-dev package of your distro). Ensure that $JAVA_HOME points to root directory of jdk.
 Navigate to gmp4j directory
+
 	cd gmp4j
+
 Create "bin" direcrtory, if missing
+
 	mkdir bin
+
 Run make
+
 	make
+
 If make was successful, copy bin/libgmp4j.so to somewhere in your library.path, for instance in bin directory of your jre/jdk.
+
 	cp bin/libgmp4j.so $(dirname `which java`)
+
 And add gmp4j.jar to your classpath.
 
 Windows
 -----
 Ensure that %JAVA_HOME% points to root directory of jdk. Open "Visual studio command prompt"(look in "Start" menu)
 Navigate to gmp4j directory
+
 	cd gmp4j
+
 Create "bin" direcrtory, if missing
+
 	mkdir bin
+
 Run nmake -f Makefile.win
+
 	nmake -f Makefile.win
+
 If make was successful, copy bin/gmp4j.dll to somewhere in your library.path, for instance in bin directory of your jre/jdk.
 And add gmp4j.jar to your classpath.
 
@@ -105,6 +119,7 @@ Quirks
 	typedef __int64 jlong;
 
 with lines:
+
 	#ifdef __GNUC__
 	typedef long long jlong;
 	#else
