@@ -16,8 +16,21 @@ import us.altio.gmp4j.BigInteger;
 
 public class UnitTestRandomValuesCompareWithJMB {
 
-	static final long RUNCYCLES = 1000;
+	static final long RUNCYCLES = 30000;
 
+	private String getRandomNumString(int len) {
+		Random r = new Random();
+		String s = StringUtils.stripStart(TestUtils.genStringFromChars(r
+				.nextInt(len) + 2, "0123456789"), "0");
+		if (s.equals(""))
+			s = "0";
+		if (!s.equals("0") && r.nextBoolean() == true) {
+			s = "-" + s;
+		}
+		return s;
+	}
+
+	
 	@Before
 	public void setUp() throws Exception {
 		System.gc();
@@ -28,7 +41,7 @@ public class UnitTestRandomValuesCompareWithJMB {
 		Random r = new Random();
 		for (int i = 0; i < RUNCYCLES; i++) {
 
-			BigInteger bi = BigInteger.random(32);
+			BigInteger bi = BigInteger.random(128);
 			String bis = bi.toString();
 			while (r.nextFloat() < 0.9) {
 				BigInteger bi2 = new BigInteger(bis);
@@ -42,7 +55,7 @@ public class UnitTestRandomValuesCompareWithJMB {
 	@Test
 	public void testToString() {
 		for (int i = 0; i < RUNCYCLES; i++) {
-			String s = getRandomNumString(64);
+			String s = getRandomNumString(128);
 			BigInteger bi = new BigInteger(s);
 			Assert.assertEquals(s, bi.toString());
 		}
@@ -95,17 +108,20 @@ public class UnitTestRandomValuesCompareWithJMB {
 	public void testFloatValue() {
 		Random r = new Random();
 		for (int i = 0; i < RUNCYCLES; i++) {
-			int randInt = r.nextInt((int)Math.pow(2, 24)) - ((int)Math.pow(2, 24) / 2);
+			int randInt = r.nextInt((int)Math.pow(2, 24)) - ((int)Math.pow(2, 23));
 			BigInteger bi = new BigInteger(randInt);
 			Assert.assertEquals(randInt, (long) bi.floatValue());
 		}
 	}
 
 	@Test
+	/**
+	 * I've expected double to have better precision. Lost of precision?
+	 */
 	public void testDoubleValue() {
 		Random r = new Random();
 		for (int i = 0; i < RUNCYCLES; i++) {
-			int randLong = r.nextInt((int)Math.pow(2, 24)) - ((int)Math.pow(2, 24) / 2);
+			int randLong = r.nextInt((int)Math.pow(2, 24)) - ((int)Math.pow(2, 23));
 			BigInteger bi = new BigInteger(randLong);
 			Assert.assertEquals(randLong, (long) bi.floatValue());
 		}
@@ -133,7 +149,7 @@ public class UnitTestRandomValuesCompareWithJMB {
 	 */
 	public void testBigIntegerString() {
 		for (int i = 0; i < RUNCYCLES; i++) {
-			String s = getRandomNumString(64);
+			String s = getRandomNumString(128);
 			BigInteger bi = new BigInteger(s);
 			Assert.assertEquals(s, bi.toString());
 		}
@@ -143,7 +159,7 @@ public class UnitTestRandomValuesCompareWithJMB {
 	public void testBigIntegerStringInt() {
 		Random r = new Random();
 		for (int i = 0; i < RUNCYCLES; i++) {
-			String s = getRandomNumString(64);
+			String s = getRandomNumString(128);
 			java.math.BigInteger jmbi = new java.math.BigInteger(s);
 			int base = r.nextInt(26) + 10;
 			String jmbis = jmbi.toString(base);
@@ -156,7 +172,7 @@ public class UnitTestRandomValuesCompareWithJMB {
 	public void testToStringInt() {
 		Random r = new Random();
 		for (int i = 0; i < RUNCYCLES; i++) {
-			String s = getRandomNumString(64);
+			String s = getRandomNumString(128);
 			java.math.BigInteger jmbi = new java.math.BigInteger(s);
 			int base = r.nextInt(26) + 10;
 			String jmbis = jmbi.toString(base);
@@ -164,19 +180,7 @@ public class UnitTestRandomValuesCompareWithJMB {
 			Assert.assertEquals(jmbis, bi.toString(base));
 		}
 	}
-
-	private String getRandomNumString(int len) {
-		Random r = new Random();
-		String s = StringUtils.stripStart(TestUtils.genStringFromChars(r
-				.nextInt(len) + 2, "0123456789"), "0");
-		if (s.equals(""))
-			s = "0";
-		if (!s.equals("0") && r.nextBoolean() == true) {
-			s = "-" + s;
-		}
-		return s;
-	}
-
+	
 	@Test
 	public void testCompareTo() {
 		Random r = new Random();
@@ -194,7 +198,7 @@ public class UnitTestRandomValuesCompareWithJMB {
 	@Test
 	public void testAbs() {
 		for (int i = 0; i < RUNCYCLES; i++) {
-			BigInteger bi = getPosNegBI(64);
+			BigInteger bi = getPosNegBI(128);
 			java.math.BigInteger jmbi = new java.math.BigInteger(bi.toString());
 			if (bi.signum() == -1) {
 				Assert.assertEquals(BigInteger.ZERO, bi.add(bi.abs()));
@@ -602,7 +606,7 @@ public class UnitTestRandomValuesCompareWithJMB {
 		Assert.assertEquals(0, BigInteger.ZERO.signum());
 		Assert.assertEquals(-1, BigInteger.MINUSONE.signum());
 		for (int i = 0; i < RUNCYCLES; i++) {
-			BigInteger bi1 = getPosNegBI(32);
+			BigInteger bi1 = getPosNegBI(128);
 
 			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
 					.toString());
