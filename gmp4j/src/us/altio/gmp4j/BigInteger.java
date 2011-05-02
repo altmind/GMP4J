@@ -437,22 +437,22 @@ public class BigInteger extends Number implements Comparable<BigInteger>/* , Clo
 
 	/* EXTENSION METHODS */
 
-	public BigInteger divQuotent(BigInteger p) {
+/*	public BigInteger divQuotent(BigInteger p) {
 		if (p == null)
 			throw new NullPointerException("Null argument was passed");
 		if (p.signum() == 0)
 			throw new ArithmeticException("Cannot divide by zero.");
 		return new BigInteger(natMpzTdivQ(this.native_ptr, p.native_ptr));
-	}
+	}*/
 
-	public BigInteger divRemainder(BigInteger p) {
+/*	public BigInteger divRemainder(BigInteger p) {
 		if (p == null)
 			throw new NullPointerException("Null argument was passed");
 		if (p.signum() == 0)
 			throw new ArithmeticException("Cannot divide by zero.");
 		return new BigInteger(natMpzTdivR(this.native_ptr, p.native_ptr));
 	}
-
+*/
 	public boolean divisible(BigInteger p) {
 		if (p == null)
 			throw new NullPointerException("Null argument was passed");

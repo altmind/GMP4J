@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.collections.Bag;
-import org.apache.commons.collections.HashBag;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -424,9 +422,21 @@ public class UnitTestRandomValuesCompareWithJMB {
 	}
 
 	@Test
-	@Ignore
 	public void testModInverse() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(512);
+			BigInteger bi2 = getPosNegBI(64).abs();
+			BigInteger bi3 = getPosNegBI(96).abs();
+			BigInteger bi4 = bi1.modPow(bi2,bi3);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			java.math.BigInteger jmbi2 = new java.math.BigInteger(bi2
+					.toString());
+			java.math.BigInteger jmbi3 = new java.math.BigInteger(bi3
+					.toString());
+			java.math.BigInteger jmbi4 = jmbi1.modPow(jmbi2,jmbi3);
+			Assert.assertEquals(jmbi4.toString(), bi4.toString());
+		}
 	}
 
 	@Test
@@ -528,9 +538,18 @@ public class UnitTestRandomValuesCompareWithJMB {
 	}
 
 	@Test
-	@Ignore
 	public void testRemainder() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(256);
+			BigInteger bi2 = getPosNegBI(128);
+			BigInteger bi3 = bi1.remainder(bi2);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			java.math.BigInteger jmbi2 = new java.math.BigInteger(bi2
+					.toString());
+			java.math.BigInteger jmbi3[] = jmbi1.divideAndRemainder(jmbi2);
+			Assert.assertEquals(jmbi3[1].toString(), bi3.toString());
+		}
 	}
 
 	@Test
@@ -654,21 +673,18 @@ public class UnitTestRandomValuesCompareWithJMB {
 	}
 
 	@Test
-	@Ignore
-	public void testDivQuotent() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	@Ignore
-	public void testDivRemainder() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	@Ignore
 	public void testDivisible() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = getPosNegBI(128);
+			BigInteger bi2 = getPosNegBI(8);
+			boolean divisible = bi1.divisible(bi2);
+			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
+					.toString());
+			java.math.BigInteger jmbi2 = new java.math.BigInteger(bi2
+					.toString());
+			java.math.BigInteger[] jmbi3 = jmbi1.divideAndRemainder(jmbi2);
+			Assert.assertTrue((jmbi3[1].signum()!=0 && !divisible) || (jmbi3[1].signum()==0 && divisible));
+		}
 	}
 
 	@Test
