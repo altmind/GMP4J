@@ -427,14 +427,14 @@ public class UnitTestRandomValuesCompareWithJMB {
 			BigInteger bi1 = getPosNegBI(512);
 			BigInteger bi2 = getPosNegBI(64).abs();
 			BigInteger bi3 = getPosNegBI(96).abs();
-			BigInteger bi4 = bi1.modPow(bi2,bi3);
+			BigInteger bi4 = bi1.modPow(bi2, bi3);
 			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
 					.toString());
 			java.math.BigInteger jmbi2 = new java.math.BigInteger(bi2
 					.toString());
 			java.math.BigInteger jmbi3 = new java.math.BigInteger(bi3
 					.toString());
-			java.math.BigInteger jmbi4 = jmbi1.modPow(jmbi2,jmbi3);
+			java.math.BigInteger jmbi4 = jmbi1.modPow(jmbi2, jmbi3);
 			Assert.assertEquals(jmbi4.toString(), bi4.toString());
 		}
 	}
@@ -683,7 +683,8 @@ public class UnitTestRandomValuesCompareWithJMB {
 			java.math.BigInteger jmbi2 = new java.math.BigInteger(bi2
 					.toString());
 			java.math.BigInteger[] jmbi3 = jmbi1.divideAndRemainder(jmbi2);
-			Assert.assertTrue((jmbi3[1].signum()!=0 && !divisible) || (jmbi3[1].signum()==0 && divisible));
+			Assert.assertTrue((jmbi3[1].signum() != 0 && !divisible)
+					|| (jmbi3[1].signum() == 0 && divisible));
 		}
 	}
 
@@ -704,45 +705,112 @@ public class UnitTestRandomValuesCompareWithJMB {
 	}
 
 	@Test
-	@Ignore
 	public void testSqrtIntegerPart() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = new BigInteger(getRandomNumString(128));
+			boolean arithmeticExceptionThrown = false;
+			try {
+				BigInteger bisqrt[] = bi1.sqrt();
+				Assert.assertEquals(bisqrt[0], bi1.sqrtIntegerPart());
+			} catch (ArithmeticException e) {
+				arithmeticExceptionThrown = true;
+			}
+			Assert.assertTrue(bi1.signum() >= 0 || arithmeticExceptionThrown);
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testIsSqrtWithoutRemainder() {
-		fail("Not yet implemented");
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = new BigInteger(getRandomNumString(128));
+			boolean arithmeticExceptionThrown = false;
+			try {
+				BigInteger bisqrt[] = bi1.sqrt();
+				boolean isSqrtWithoutRem = bi1.isSqrtWithoutRemainder();
+				Assert.assertTrue((bisqrt[1].signum() == 0 && isSqrtWithoutRem)
+						|| (bisqrt[1].signum() != 0 && !isSqrtWithoutRem));
+			} catch (ArithmeticException e) {
+				arithmeticExceptionThrown = true;
+			}
+			Assert.assertTrue(bi1.signum() >= 0 || arithmeticExceptionThrown);
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testRoot() {
-		fail("Not yet implemented");
+		Random r = new Random();
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = new BigInteger(getRandomNumString(128));
+			int root = r.nextInt(10) + 2;
+			boolean arithmeticExceptionThrown = false;
+			try {
+				BigInteger biroot[] = bi1.root(root);
+				BigInteger bi3 = biroot[0].pow(root).add(biroot[1]);
+				Assert.assertEquals(bi1, bi3);
+			} catch (ArithmeticException e) {
+				arithmeticExceptionThrown = true;
+			}
+			Assert.assertTrue(!(bi1.signum() < 0 && root % 2 == 0)
+					|| arithmeticExceptionThrown);
+
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testRootIntegerPart() {
-		fail("Not yet implemented");
+		Random r = new Random();
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = new BigInteger(getRandomNumString(128));
+			int root = r.nextInt(10) + 2;
+			boolean arithmeticExceptionThrown = false;
+			try {
+				BigInteger biroot[] = bi1.root(root);
+				Assert.assertEquals(biroot[0], bi1.rootIntegerPart(root));
+			} catch (ArithmeticException e) {
+				arithmeticExceptionThrown = true;
+			}
+			Assert.assertTrue(!(bi1.signum() < 0 && root % 2 == 0)
+					|| arithmeticExceptionThrown);
+
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testLcm() {
-		fail("Not yet implemented");
+		Random r = new Random();
+		for (int i = 0; i < RUNCYCLES; i++) {
+			BigInteger bi1 = new BigInteger(getRandomNumString(128));
+			BigInteger bi2 = new BigInteger(getRandomNumString(128));
+			BigInteger bi3=bi1.multiply(bi2).abs().divide(bi1.gcd(bi2));
+			Assert.assertEquals(bi3,bi1.lcm(bi2));
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testFactorial() {
-		fail("Not yet implemented");
+		BigInteger lastFac=BigInteger.ONE;
+		for (int i = 2; i < RUNCYCLES; i++) {
+			lastFac=lastFac.multiply(new BigInteger(i));
+			Assert.assertEquals(lastFac, BigInteger.factorial(i));
+		}
 	}
 
 	@Test
-	@Ignore
 	public void testBinomal() {
-		fail("Not yet implemented");
+		Random r = new Random();
+		for (int n = 2; n < 2*Math.sqrt(RUNCYCLES); n++) {
+			for(int k=1; k<n;k++)
+			{
+				/*
+				 * Checks that C(n,k)=n!/k!*(n-k)!
+				 */
+				BigInteger bi1 = BigInteger.binomal(new BigInteger(n), k);
+				BigInteger bi2_1 = BigInteger.factorial(n);
+				BigInteger bi2_2 = BigInteger.factorial(k).multiply(BigInteger.factorial(n-k));
+				BigInteger bi2_3 = bi2_1.divide(bi2_2);
+				Assert.assertEquals(bi2_3,bi1);
+			}
+		}
 	}
 
 	@Test
@@ -786,12 +854,18 @@ public class UnitTestRandomValuesCompareWithJMB {
 
 	@Test
 	@Ignore
+	/*
+	 * http://en.wikipedia.org/wiki/Diehard_tests
+	 */
 	public void testRandomBigInteger() {
 		fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
+	/*
+	 * http://en.wikipedia.org/wiki/Diehard_tests
+	 */
 	public void testRandomInt() {
 		fail("Not yet implemented");
 	}

@@ -511,7 +511,7 @@ public class BigInteger extends Number implements Comparable<BigInteger>/* , Clo
 		return new BigInteger(natMpzFac(p));
 	}
 
-	static public BigInteger binomal(BigInteger n, long k) {
+	static public BigInteger binomial(BigInteger n, long k) {
 		if (n == null)
 			throw new NullPointerException("Null argument was passed");
 		if (n.signum()<=0 || k<=0)
