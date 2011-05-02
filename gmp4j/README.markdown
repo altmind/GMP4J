@@ -31,7 +31,7 @@ GMP4J objects are immutable, just like j.m.BI objects. Each operation returns ne
 Performance
 -----------
 GMP4J benefits from operations on big input values. Operations on small inputs may be simply not algorithm-bounded. Gains are especially visible in multiplication, powering, toString. Some GMP4J operations are not faster than those, in j.m.BI: for instnce random number generation(GMP internally uses Mersenne Twister for PRNG, whereas java SecureRandom uses linear generator and hash, which is generally faster). To give you orders of performance increase, here is results of
-
+<pre>
 Fibonacci/Takashi:
 	n	GMP4j	JMB
 	5000	0	5
@@ -61,7 +61,7 @@ PIDigits:
 	13000	2042	5799
 	14000	2047	6717
 	15000	2201	7798
-
+</pre>
 Installation
 ------------
 GMP4J was designed to run on both unices and windows as first-class platforms.
