@@ -16,7 +16,7 @@ import us.altio.gmp4j.BigInteger;
 
 public class UnitTestRandomValuesCompareWithJMB {
 
-	static final long RUNCYCLES = 5000;
+	static final long RUNCYCLES = 1000;
 
 	@Before
 	public void setUp() throws Exception {
@@ -95,9 +95,9 @@ public class UnitTestRandomValuesCompareWithJMB {
 	public void testFloatValue() {
 		Random r = new Random();
 		for (int i = 0; i < RUNCYCLES; i++) {
-			long randLong = r.nextLong() - (Long.MAX_VALUE / 2);
-			BigInteger bi = new BigInteger(randLong);
-			Assert.assertEquals(randLong, (long) bi.floatValue());
+			int randInt = r.nextInt((int)Math.pow(2, 24)) - ((int)Math.pow(2, 24) / 2);
+			BigInteger bi = new BigInteger(randInt);
+			Assert.assertEquals(randInt, (long) bi.floatValue());
 		}
 	}
 
@@ -105,9 +105,9 @@ public class UnitTestRandomValuesCompareWithJMB {
 	public void testDoubleValue() {
 		Random r = new Random();
 		for (int i = 0; i < RUNCYCLES; i++) {
-			long randLong = r.nextLong() - (Long.MAX_VALUE / 2);
+			int randLong = r.nextInt((int)Math.pow(2, 24)) - ((int)Math.pow(2, 24) / 2);
 			BigInteger bi = new BigInteger(randLong);
-			Assert.assertEquals(randLong, (long) bi.doubleValue());
+			Assert.assertEquals(randLong, (long) bi.floatValue());
 		}
 	}
 
@@ -261,7 +261,7 @@ public class UnitTestRandomValuesCompareWithJMB {
 	@Test
 	public void testBitCount() {
 		for (int i = 0; i < RUNCYCLES; i++) {
-			BigInteger bi1 = getPosNegBI(512);
+			BigInteger bi1 = getPosNegBI(256).abs();
 			java.math.BigInteger jmbi1 = new java.math.BigInteger(bi1
 					.toString());
 			Assert.assertEquals(jmbi1.bitCount(), bi1.bitCount());
@@ -777,38 +777,36 @@ public class UnitTestRandomValuesCompareWithJMB {
 
 	@Test
 	public void testLcm() {
-		Random r = new Random();
 		for (int i = 0; i < RUNCYCLES; i++) {
 			BigInteger bi1 = new BigInteger(getRandomNumString(128));
 			BigInteger bi2 = new BigInteger(getRandomNumString(128));
-			BigInteger bi3=bi1.multiply(bi2).abs().divide(bi1.gcd(bi2));
-			Assert.assertEquals(bi3,bi1.lcm(bi2));
+			BigInteger bi3 = bi1.multiply(bi2).abs().divide(bi1.gcd(bi2));
+			Assert.assertEquals(bi3, bi1.lcm(bi2));
 		}
 	}
 
 	@Test
 	public void testFactorial() {
-		BigInteger lastFac=BigInteger.ONE;
+		BigInteger lastFac = BigInteger.ONE;
 		for (int i = 2; i < RUNCYCLES; i++) {
-			lastFac=lastFac.multiply(new BigInteger(i));
+			lastFac = lastFac.multiply(new BigInteger(i));
 			Assert.assertEquals(lastFac, BigInteger.factorial(i));
 		}
 	}
 
 	@Test
 	public void testBinomal() {
-		Random r = new Random();
-		for (int n = 2; n < 2*Math.sqrt(RUNCYCLES); n++) {
-			for(int k=1; k<n;k++)
-			{
+		for (int n = 2; n < 2 * Math.sqrt(RUNCYCLES); n++) {
+			for (int k = 1; k < n; k++) {
 				/*
 				 * Checks that C(n,k)=n!/k!*(n-k)!
 				 */
-				BigInteger bi1 = BigInteger.binomal(new BigInteger(n), k);
+				BigInteger bi1 = BigInteger.binomial(new BigInteger(n), k);
 				BigInteger bi2_1 = BigInteger.factorial(n);
-				BigInteger bi2_2 = BigInteger.factorial(k).multiply(BigInteger.factorial(n-k));
+				BigInteger bi2_2 = BigInteger.factorial(k).multiply(
+						BigInteger.factorial(n - k));
 				BigInteger bi2_3 = bi2_1.divide(bi2_2);
-				Assert.assertEquals(bi2_3,bi1);
+				Assert.assertEquals(bi2_3, bi1);
 			}
 		}
 	}

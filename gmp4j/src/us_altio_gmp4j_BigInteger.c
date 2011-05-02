@@ -86,12 +86,50 @@ JNIEXPORT jobject JNICALL Java_us_altio_gmp4j_BigInteger_natMpzMul(JNIEnv * env,
 /*
  * initialize (Pointer)BI with java signed long
  */
+ // TODO: @altmind THIS IS NOT EFFECTIVE. find a better way to init from long long at once
 JNIEXPORT void JNICALL Java_us_altio_gmp4j_BigInteger_natMpzInitSetSi
 (JNIEnv * env, jobject this, jlong val) {
 	mpz_ptr new;
 	jobject native_ptr_fld;
+	//unsigned long limb1, limb2;
+	signed int signum;
+
 	new = (mpz_ptr) Common_malloc(env, sizeof(mpz_t));
-	mpz_init_set_si(new, val);
+	/*if (val==0)
+	{
+		mpz_init(new);
+	}
+	else
+	{
+		signum=(val<0)?-1:1;
+		val=llabs(val);
+		limb1=val>>(sizeof(unsigned long)*8);
+		limb2=(val & 0xFFFFFFFF);
+		if (limb1!=0)
+		{
+			mpz_init_set_ui(new, limb1);
+			mpz_mul_2exp(new, new, sizeof(unsigned long)*8);
+		}
+		else
+		{
+			mpz_init(new);
+		}
+		if (limb2!=0)
+			mpz_add_ui(new, new, limb2);
+		if (signum==-1)
+			mpz_neg(new,new);
+	}*/
+	/*
+	 * read into new; 2 words; least significant first(-1); each 4bytes; native endianness(0);
+	 * dont skip anything(0); from val
+	 */
+	mpz_init(new);
+	signum=(val<0)?-1:1;
+	val=llabs(val);
+	//mpz_import(new, 2, -1, sizeof(long), 0, 0, &val);
+	mpz_import(new, sizeof(unsigned long long), -1, 1, 0, 0, &val);
+	if (signum==-1)
+			mpz_neg(new,new);
 	native_ptr_fld = Common_NewRawDataObject(env, new);
 	(*env)->SetObjectField(env, this, native_ptr, native_ptr_fld);
 }
@@ -196,7 +234,15 @@ JNIEXPORT jstring JNICALL Java_us_altio_gmp4j_BigInteger_natMpzGetStr(
  */
 JNIEXPORT jlong JNICALL Java_us_altio_gmp4j_BigInteger_natGetSi(JNIEnv * env,
 		jobject this, jobject that) {
-	return (mpz_get_si((mpz_ptr) Common_GetRawData(env, that)));
+	signed long long result = 0;
+
+	mpz_ptr p = ((mpz_ptr)Common_GetRawData(env, that));
+	mpz_export(&result, NULL, -1, 1, 0, 0, p);
+	if (mpz_sgn(p)<0)
+	{
+		result=-llabs(result);
+	}
+	return result;
 }
 
 /*
@@ -852,7 +898,29 @@ JNIEXPORT jlong JNICALL Java_us_altio_gmp4j_BigInteger_natMpzScan1
 JNIEXPORT jlong JNICALL Java_us_altio_gmp4j_BigInteger_natMpzPopcount
   (JNIEnv * env, jobject this, jobject that)
 {
-	return ((jlong)mpz_popcount((mpz_ptr) Common_GetRawData(env, that)));
+	int needcleanup;
+	jlong popcount;
+	mpz_ptr val, new;
+
+	needcleanup=0;
+	val=(mpz_ptr) Common_GetRawData(env, that);
+	if (mpz_sgn(val)<0)
+	{
+		new = (mpz_ptr) Common_malloc(env, sizeof(mpz_t));
+		mpz_init(new);
+		mpz_abs(new,val);
+		val=new;
+		needcleanup=1;
+	}
+	popcount = (jlong)mpz_popcount(val);
+	if (needcleanup)
+	{
+		mpz_clear(val);
+		Common_free(env,val);
+		val=NULL;
+	}
+	return popcount;
+
 }
 
 /*

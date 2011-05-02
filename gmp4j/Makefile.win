@@ -1,5 +1,5 @@
 INCLUDES = /I"$(JAVA_HOME)include" /I"$(JAVA_HOME)include\win32" /I"$(MAKEDIR)\precompiled\mpir"
-CFLAGS = /O2 /LD /link precompiled\mpir\mpir.lib
+CFLAGS = /W3 /O2 /LD /link precompiled\mpir\mpir.lib
 
 
 all: bin/gmp4j.dll bin/gmp4j.jar
