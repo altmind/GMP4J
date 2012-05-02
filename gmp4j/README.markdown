@@ -7,22 +7,22 @@ High-speed API-compatible portable implementation of BigInteger using native GMP
 Motivation
 ----------
 
-Most operations with arbitrary precision integers in Java are performed using java.math.BigInteger. j.m.BI is implemented in plain java and is mature and ubiqious. However j.m.BI
+Most operations with arbitrary precision integers in Java are performed using java.math.BigInteger. j.m.BI is implemented in plain Java and is mature and ubiqious. However j.m.BI:
 
-* uses ineffective algorithms(for instance, multiplication is performed using schoolgrade method) 
-* completely lacks some useful methods(for instance, sqrt).
-* could accomodate short-cut methods which implement some often used operations effectively(lcm,factorials,binomials)
+* uses ineffective algorithms (for instance, multiplication is performed using schoolgrade method) 
+* completely lacks some useful methods (for instance, sqrt).
+* could accomodate short-cut methods which implement some often used operations effectively (lcm,factorials,binomials)
 
 GMP4J is not only faster, but is much more feature rich. 
 
 Implementation
 --------------
 
-GMP4J uses Java Native Interface to communicate to GMP - library for manipulation with arbitrary precision numbers. GMP4J links dynamically to GMP under unices and links statically to MPIR(GMP clone with better windows support) under windows. GMP4J do support both 32bit and 64bit platforms.
+GMP4J uses Java Native Interface to communicate to GMP - library for manipulation with arbitrary precision numbers. GMP4J links dynamically to GMP under unices and links statically to MPIR (GMP clone with better Windows support) under Windows. GMP4J supports both 32-bit and 64-bit platforms.
 
 Compatibility
 -------------
-GMP4J intended to be drop-in replacement of j.m.BI: you need to simply change import "java.math.BigInteger" to "us.altio.gmp4j.BigInteger" - GMP4J is (mostly) API complitant with j.m.BI. You can face problems with methods operating with byte[], however - those methods expose internals of class too much. Those problems could be solved in future.
+GMP4J intended to be drop-in replacement of j.m.BI: you need to simply change import "java.math.BigInteger" to "us.altio.gmp4j.BigInteger" - GMP4J is (mostly) API compliant with j.m.BI. You can face problems with methods operating with byte[], however - those methods expose internals of class too much. Those problems could be solved in future.
 
 GMP4J provides many new convinience methods, in addition to those, defined in j.m.BI.
 
@@ -30,7 +30,7 @@ GMP4J objects are immutable, just like j.m.BI objects. Each operation returns ne
 
 Performance
 -----------
-GMP4J benefits from operations on big input values. Operations on small inputs may be simply not algorithm-bounded. Gains are especially visible in multiplication, powering, toString. Some GMP4J operations are not faster than those, in j.m.BI: for instnce shift left-right(GMP dont expose such operations, we simulate them), random number generation(GMP internally uses Mersenne Twister for PRNG, whereas java SecureRandom uses linear generator and hash, which is generally faster). To give you orders of performance increase, here is results of
+GMP4J benefits from operations on big input values. Operations on small inputs may be simply not algorithm-bounded. Gains are especially visible in multiplication, powering, toString. Some GMP4J operations are not faster than those, in j.m.BI: for instance shift left-right (GMP don't expose such operations, we simulate them), random number generation (GMP internally uses Mersenne Twister for PRNG, whereas java SecureRandom uses linear generator and hash, which is generally faster). To give you orders of performance increase, here is results of
 <pre>
 Fibonacci/Takashi:
 	n	GMP4j	JMB
@@ -72,7 +72,7 @@ Tested on:
 
 Unix
 ----
-Ensure that you installed JDK, sane C compiler, GMP library and GMP library headers(usually in gmp-dev package of your distro). Ensure that $JAVA_HOME points to root directory of jdk.
+Ensure that you installed JDK, sane C compiler, GMP library and GMP library headers (usually in gmp-dev package of your distro). Ensure that $JAVA_HOME points to root directory of jdk.
 Navigate to gmp4j directory
 
 	cd gmp4j
@@ -93,7 +93,7 @@ And add gmp4j.jar to your classpath.
 
 Windows
 -----
-Ensure that %JAVA_HOME% points to root directory of jdk. Open "Visual studio command prompt"(look in "Start" menu)
+Ensure that %JAVA_HOME% points to root directory of jdk. Open "Visual studio command prompt" (look in "Start" menu)
 Navigate to gmp4j directory
 
 	cd gmp4j
@@ -113,7 +113,7 @@ _N.B. for your convinience, prebuilt binaries of MPIR are included in package, y
 
 Quirks
 ------
-* GMP4J uses native unmanaged memory for storing GMP BI objects. Each of this objects is associated with GMP4J BigInteger class. When GMP4J java BI object is garbage collected, native object is GC'd as well. However, unmanaged JNI memory is not tracked by JVM(JVM only tracks heap) - when there are actually a lot of native objects which can be GC'd, JVM see that there is a lot of free space in heap left, and don't run GC. It may be a good idea to run System.gc() when you suppose that there may be GMP4J objects for collection.
+* GMP4J uses native unmanaged memory for storing GMP BI objects. Each of this objects is associated with GMP4J BigInteger class. When GMP4J java BI object is garbage collected, native object is GC'd as well. However, unmanaged JNI memory is not tracked by JVM (JVM only tracks heap) - when there are actually a lot of native objects which can be GC'd, JVM see that there is a lot of free space in heap left, and don't run GC. It may be a good idea to run System.gc() when you suppose that there may be GMP4J objects for collection.
 * When building under cygwin, gcc may complain about code in jni_md.h. In that case replace line 
 
 	typedef __int64 jlong;
