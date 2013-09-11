@@ -1,0 +1,27 @@
+INCLUDES = /I"$(JAVA_HOME)/include" /I"$(JAVA_HOME)/include\win32" /I"$(MAKEDIR)\precompiled\mpir_x86"
+CFLAGS = /W3 /O2 /LD /link precompiled\mpir_x86\mpir.lib
+
+
+all: bin/gmp4j.dll bin/gmp4j.jar
+
+
+bin/us/altio/BigInteger.class: src/us/altio/gmp4j/*.java
+	"$(JAVA_HOME)/bin/javac" -d bin src/us/altio/gmp4j/*.java
+
+bin/us_altio_gmp4j_BigInteger.h: bin/us/altio/BigInteger.class
+	"$(JAVA_HOME)/bin/javah" -d bin -classpath bin us.altio.gmp4j.BigInteger	
+
+bin/gmp4j.dll: bin/us_altio_gmp4j_BigInteger.h
+	cl $(INCLUDES) src/common.c src/us_altio_gmp4j_BigInteger.c /Febin/gmp4j.dll $(CFLAGS)
+
+bin/gmp4j.jar:
+	"$(JAVA_HOME)/bin/jar" cvf bin/gmp4j.jar -C bin us/altio/gmp4j
+	
+install:
+	echo please copy bin/libgmp4j.dll anywhere in your PATH: $(PATH)
+
+check:
+	echo perform checks here
+
+clean:
+	del /Q bin\*
